@@ -1,4 +1,5 @@
-export type cepForm = {
+export type CepForm = {
+  _id?: string;
   cep: string;
   logradouro: string;
   complemento: string;

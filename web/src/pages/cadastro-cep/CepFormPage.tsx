@@ -1,6 +1,6 @@
 import { Formik, FormikProps } from 'formik';
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Container,
   Row,
@@ -11,11 +11,12 @@ import {
   ButtonToggle,
 } from 'reactstrap';
 import * as Yup from 'yup';
-import { cepForm } from '../types/Cep';
+import { CadastroCepService } from '../../services';
+import { CepForm } from '../../types/Cep';
 
 type Props = {};
 
-const initialValue: cepForm = {
+const initialValue: CepForm = {
   cep: '',
   logradouro: '',
   complemento: '',
@@ -36,21 +37,39 @@ const validationSchema = Yup.object().shape({
 
 const CepFormPage: React.FC<Props> = () => {
   const history = useHistory();
+  const { id } = useParams<{ id: string }>();
+  const [cep, setCep] = useState<CepForm>(initialValue);
+  const isNew = id === 'novo';
 
-  const onSubmit = (values: cepForm) => {
-    console.log({ values });
+  useEffect(() => {
+    if (!isNew) {
+      CadastroCepService.findById(id)
+        .then((response) => {
+          console.log({ response: response.data });
+          setCep(response.data);
+        })
+        .catch((error) => {
+          console.log({ error });
+        });
+    }
+  }, [isNew, id]);
 
-    history.push('/ceps');
+  const onSubmit = (value: CepForm) => {
+    CadastroCepService.save(value)
+      .then(() => history.push('/ceps'))
+      .catch((error) => console.log({ error }));
   };
 
   return (
     <Container className='themed-container'>
+      {console.log({ cep })}
       <Formik
-        initialValues={initialValue}
+        initialValues={cep}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
+        enableReinitialize
       >
-        {(formProps: FormikProps<cepForm>) => (
+        {(formProps: FormikProps<CepForm>) => (
           <React.Fragment>
             <Row>
               <Col md={2}>
@@ -65,6 +84,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('cep', value.target.value);
                       formProps.setFieldTouched('cep', true);
                     }}
+                    value={formProps.values.cep}
                   />
                   {formProps.touched.cep && formProps.errors.cep ? (
                     <div className='error'>{formProps.errors.cep}</div>
@@ -82,6 +102,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('logradouro', value.target.value);
                       formProps.setFieldTouched('logradouro', true);
                     }}
+                    value={formProps.values.logradouro}
                   />
                   {formProps.touched.logradouro &&
                   formProps.errors.logradouro ? (
@@ -103,6 +124,7 @@ const CepFormPage: React.FC<Props> = () => {
                       );
                       formProps.setFieldTouched('complemento', true);
                     }}
+                    value={formProps.values.complemento}
                   />
                   {formProps.touched.complemento &&
                   formProps.errors.complemento ? (
@@ -121,6 +143,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('bairro', value.target.value);
                       formProps.setFieldTouched('bairro', true);
                     }}
+                    value={formProps.values.bairro}
                   />
                   {formProps.touched.bairro && formProps.errors.bairro ? (
                     <div className='error'>{formProps.errors.bairro}</div>
@@ -140,6 +163,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('cidade', value.target.value);
                       formProps.setFieldTouched('cidade', true);
                     }}
+                    value={formProps.values.cidade}
                   />
                   {formProps.touched.cidade && formProps.errors.cidade ? (
                     <div className='error'>{formProps.errors.cidade}</div>
@@ -157,6 +181,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('uf', value.target.value);
                       formProps.setFieldTouched('uf', true);
                     }}
+                    value={formProps.values.uf}
                   />
                   {formProps.touched.uf && formProps.errors.uf ? (
                     <div className='error'>{formProps.errors.uf}</div>
@@ -174,6 +199,7 @@ const CepFormPage: React.FC<Props> = () => {
                       formProps.setFieldValue('ibge', value.target.value);
                       formProps.setFieldTouched('ibge', true);
                     }}
+                    value={formProps.values.ibge}
                   />
                   {formProps.touched.ibge && formProps.errors.ibge ? (
                     <div className='error'>{formProps.errors.ibge}</div>

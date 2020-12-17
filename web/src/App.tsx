@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Route } from 'react-router-dom';
-import HomePage from './home/HomePage';
-import CepFormPage from './cadastro-cep/CepFormPage';
-import CepListPage from './cadastro-cep/CepListPage';
+import HomePage from './pages/home/HomePage';
+import CepFormPage from './pages/cadastro-cep/CepFormPage';
+import CepListPage from './pages/cadastro-cep/CepListPage';
 
 function App() {
   return (
