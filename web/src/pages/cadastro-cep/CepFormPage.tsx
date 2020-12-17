@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
       'validaDigitoRepetidoAlternado',
       'O CEP não pode conter nenhum dígito repetitivo alternado em pares',
       function (value: number | undefined): boolean {
-        var pattern = /(?=((\d)\d\2))/;
+        const pattern = /(?=((\d)\d\2))/;
 
         return !pattern.test('' + value);
       }
@@ -68,7 +68,9 @@ const CepFormPage: React.FC<Props> = () => {
   const onSubmit = (value: CepForm) => {
     CadastroCepService.save(value)
       .then(() => history.push('/ceps'))
-      .catch((error) => console.log({ error }));
+      .catch((error) =>
+        console.log({ error: error.response.data.errorMessage })
+      );
   };
 
   const onCancel = () => {

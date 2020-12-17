@@ -26,7 +26,6 @@ const CepListPage: React.FC<Props> = () => {
   };
 
   const onEdit = (id: string) => {
-    console.log({ id });
     history.push(`/ceps/${id}`);
   };
 
@@ -63,7 +62,6 @@ const CepListPage: React.FC<Props> = () => {
           </tr>
         </thead>
         <tbody>
-          {console.log({ ceps })}
           {ceps.map((cep) => {
             return (
               <tr key={cep._id}>

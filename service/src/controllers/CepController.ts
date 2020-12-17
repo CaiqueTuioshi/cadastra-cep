@@ -1,6 +1,7 @@
 import {Request, Response} from 'express'
 
 import Cep from '../schemas/Cep'
+import { validaCep } from '../utils/CepValidation'
 
 class CepController {
   public async findAll (req: Request, res: Response): Promise<Response> {
@@ -17,36 +18,34 @@ class CepController {
 
   public async create (req: Request, res: Response): Promise<Response> {
     try {
-      if (req.body.cep < 100000 || req.body.cep > 999999) {
-        throw new Error('O CEP deve ser um número maior que 100.000 e menor que 999.999')
-      }
+      validaCep(req.body.cep)
   
       const cep = await Cep.create(req.body)
   
       return res.json(cep)
     } catch (error) {      
-      return res.status(400).json(error)
+      if (error) {
+       return res.status(400).json({errorMessage: error.toString().replace('Error:', '')})
+      }
     }
   }
 
   public async edit (req: Request, res: Response): Promise<Response> {
     try {
-      if (req.body.cep < 100000 || req.body.cep > 999999) {
-        throw new Error('O CEP deve ser um número maior que 100.000 e menor que 999.999')
-      }
+      validaCep(req.body.cep)
   
       const cep = await Cep.findOneAndUpdate({_id: req.params.id}, req.body)
 
       return res.json(cep)
     } catch (error) {      
-      return res.status(400).json(error)
+      return res.status(400).json({errorMessage: error.toString().replace('Error:', '')})
     }
   }
 
   public async delete (req: Request, res: Response): Promise<Response> {
-    const cep = await Cep.remove({ _id: req.params.id })
+    await Cep.remove({ _id: req.params.id })
 
-    return res.json('Cep removido com sucesso')
+    return res.json({successMessage: 'Cep removido com sucesso'})
   }
 }
 
