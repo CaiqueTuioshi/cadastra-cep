@@ -32,10 +32,10 @@ const validationSchema = Yup.object().shape({
     .required('CEP é obrigatório')
     .test(
       'validaDigitos',
-      'O CEP deve ser entre 100.000 e 999.999',
+      'O CEP deve ser entre 100.001 e 999.998',
       function (value: number | undefined): boolean {
         if (value !== undefined) {
-          return !(value < 100000 || value > 999999);
+          return !(value < 100001 || value > 999998);
         }
 
         return true;
