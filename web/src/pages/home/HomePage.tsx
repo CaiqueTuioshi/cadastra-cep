@@ -7,6 +7,7 @@ import {
   Nav,
   NavItem,
   NavLink,
+  Container,
 } from 'reactstrap';
 
 type Props = {};
@@ -16,7 +17,7 @@ const HomePage: React.FC<Props> = () => {
 
   const toggleNavbar = () => setCollapsed(!collapsed);
   return (
-    <div className='home'>
+    <Container className='home themed-container'>
       <Navbar color='light' light>
         <NavbarBrand href='/' className='mr-auto'>
           Trade Technology
@@ -33,7 +34,7 @@ const HomePage: React.FC<Props> = () => {
           </Nav>
         </Collapse>
       </Navbar>
-    </div>
+    </Container>
   );
 };
 

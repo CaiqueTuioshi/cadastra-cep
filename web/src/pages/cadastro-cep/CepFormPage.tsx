@@ -8,7 +8,7 @@ import {
   FormGroup,
   Label,
   Input,
-  ButtonToggle,
+  Button,
 } from 'reactstrap';
 import * as Yup from 'yup';
 import { CadastroCepService } from '../../services';
@@ -17,6 +17,7 @@ import { CepForm } from '../../types/Cep';
 type Props = {};
 
 const initialValue: CepForm = {
+  cep: '',
   logradouro: '',
   complemento: '',
   bairro: '',
@@ -56,7 +57,6 @@ const CepFormPage: React.FC<Props> = () => {
     if (!isNew) {
       CadastroCepService.findById(id)
         .then((response) => {
-          console.log({ response: response.data });
           setCep(response.data);
         })
         .catch((error) => {
@@ -71,9 +71,12 @@ const CepFormPage: React.FC<Props> = () => {
       .catch((error) => console.log({ error }));
   };
 
+  const onCancel = () => {
+    history.push('/ceps');
+  };
+
   return (
     <Container className='themed-container'>
-      {console.log({ cep })}
       <Formik
         initialValues={cep}
         onSubmit={onSubmit}
@@ -90,7 +93,6 @@ const CepFormPage: React.FC<Props> = () => {
                     type='text'
                     name='cep'
                     id='cep'
-                    placeholder='00000-000'
                     onChange={(value) => {
                       formProps.setFieldValue('cep', +value.target.value);
                       formProps.setFieldTouched('cep', true);
@@ -220,9 +222,16 @@ const CepFormPage: React.FC<Props> = () => {
             </Row>
 
             <div>
-              <ButtonToggle color='primary' onClick={formProps.submitForm}>
+              <Button
+                className='button'
+                color='primary'
+                onClick={formProps.submitForm}
+              >
                 Salvar
-              </ButtonToggle>
+              </Button>
+              <Button className='button' color='danger' onClick={onCancel}>
+                Cancelar
+              </Button>
             </div>
           </React.Fragment>
         )}

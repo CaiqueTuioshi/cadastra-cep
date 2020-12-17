@@ -74,10 +74,18 @@ const CepListPage: React.FC<Props> = () => {
                 <td>{cep.uf}</td>
                 <td>
                   <ButtonGroup>
-                    <Button color='success' onClick={() => onEdit(cep._id!)}>
+                    <Button
+                      className='button'
+                      color='success'
+                      onClick={() => onEdit(cep._id!)}
+                    >
                       Editar
                     </Button>
-                    <Button color='danger' onClick={() => onRemove(cep._id!)}>
+                    <Button
+                      className='button'
+                      color='danger'
+                      onClick={() => onRemove(cep._id!)}
+                    >
                       Remover
                     </Button>
                   </ButtonGroup>

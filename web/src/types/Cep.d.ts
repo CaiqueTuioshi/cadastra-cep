@@ -1,6 +1,6 @@
 export type CepForm = {
   _id?: string;
-  cep?: number;
+  cep: number | string;
   logradouro: string;
   complemento: string;
   bairro: string;
