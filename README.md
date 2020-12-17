@@ -41,4 +41,7 @@ PASSO A PASSO - (Após clonar o repósitório)
  - Subir a aplicação back com o script yarn start
  - Executa na porta 3333
  
+(TESTES UNITÁRIOS BACK-END)
+ - na pasta \cadastra-cep\service, executar o script yarn test
+ 
 OBS: Ao utilizar o sistema, o backend já se encarregará de criar o banco de dados com nome trade
