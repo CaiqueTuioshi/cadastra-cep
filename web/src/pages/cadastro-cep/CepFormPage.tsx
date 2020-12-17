@@ -1,6 +1,7 @@
 import { Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 import {
   Container,
   Row,
@@ -29,15 +30,15 @@ const initialValue: CepForm = {
 const validationSchema = Yup.object().shape({
   cep: Yup.number()
     .required('CEP é obrigatório')
-    .min(100000, 'CEP deve ser maior que 100.000')
-    .max(999999, 'CEP deve ser menor que 999.999')
     .test(
-      'validaDigitoRepetidoAlternado',
-      'O CEP não pode conter nenhum dígito repetitivo alternado em pares',
+      'validaDigitos',
+      'O CEP deve ser entre 100.000 e 999.999',
       function (value: number | undefined): boolean {
-        const pattern = /(?=((\d)\d\2))/;
+        if (value !== undefined) {
+          return !(value < 100000 || value > 999999);
+        }
 
-        return !pattern.test('' + value);
+        return true;
       }
     ),
   logradouro: Yup.string().required('Logradouro é obrigatório'),
@@ -68,9 +69,9 @@ const CepFormPage: React.FC<Props> = () => {
   const onSubmit = (value: CepForm) => {
     CadastroCepService.save(value)
       .then(() => history.push('/ceps'))
-      .catch((error) =>
-        console.log({ error: error.response.data.errorMessage })
-      );
+      .catch((error) => {
+        toast.error(error.response.data.errorMessage);
+      });
   };
 
   const onCancel = () => {
@@ -87,6 +88,7 @@ const CepFormPage: React.FC<Props> = () => {
       >
         {(formProps: FormikProps<CepForm>) => (
           <React.Fragment>
+            <ToastContainer />
             <Row>
               <Col md={2}>
                 <FormGroup>
