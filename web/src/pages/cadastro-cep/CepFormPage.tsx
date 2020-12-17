@@ -17,7 +17,6 @@ import { CepForm } from '../../types/Cep';
 type Props = {};
 
 const initialValue: CepForm = {
-  cep: '',
   logradouro: '',
   complemento: '',
   bairro: '',
@@ -27,7 +26,19 @@ const initialValue: CepForm = {
 };
 
 const validationSchema = Yup.object().shape({
-  cep: Yup.string().required('CEP é obrigatório'),
+  cep: Yup.number()
+    .required('CEP é obrigatório')
+    .min(100000, 'CEP deve ser maior que 100.000')
+    .max(999999, 'CEP deve ser menor que 999.999')
+    .test(
+      'validaDigitoRepetidoAlternado',
+      'O CEP não pode conter nenhum dígito repetitivo alternado em pares',
+      function (value: number | undefined): boolean {
+        var pattern = /(?=((\d)\d\2))/;
+
+        return !pattern.test('' + value);
+      }
+    ),
   logradouro: Yup.string().required('Logradouro é obrigatório'),
   bairro: Yup.string().required('Bairro é obrigatório'),
   cidade: Yup.string().required('Cidade é obrigatório'),
@@ -81,7 +92,7 @@ const CepFormPage: React.FC<Props> = () => {
                     id='cep'
                     placeholder='00000-000'
                     onChange={(value) => {
-                      formProps.setFieldValue('cep', value.target.value);
+                      formProps.setFieldValue('cep', +value.target.value);
                       formProps.setFieldTouched('cep', true);
                     }}
                     value={formProps.values.cep}
